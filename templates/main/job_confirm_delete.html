@@ -1,0 +1,24 @@
+{% extends "main/base.html" %}
+
+{% block title %}Потвърди изтриването — Действай!{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+  <div class="container confirm-container">
+    <a class="back-link" href="{% url 'job_detail' job.pk %}"><span aria-hidden="true">←</span> Назад към обявата</a>
+    <div class="confirm-card">
+      <span class="confirm-icon" aria-hidden="true">!</span>
+      <span class="eyebrow muted-eyebrow">ПОТВЪРЖДЕНИЕ</span>
+      <h1>Изтриване на обява<span class="heading-period">.</span></h1>
+      <p>Сигурни ли сте, че искате да изтриете <strong>{{ job.title }}</strong> от {{ job.company_name }}? Това действие не може да бъде отменено.</p>
+      <form method="post">
+        {% csrf_token %}
+        <div class="confirm-actions">
+          <a class="button button-cancel" href="{% url 'job_detail' job.pk %}">Отказ</a>
+          <button class="button button-danger" type="submit">Да, изтрий обявата <span aria-hidden="true">↗</span></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

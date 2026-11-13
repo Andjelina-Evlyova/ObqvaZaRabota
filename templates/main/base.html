@@ -1,0 +1,37 @@
+{% load static %}
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e9">
+  <meta name="description" content="Намери работа, която ти пасва. Разгледай актуални обяви и кандидатствай директно.">
+  <title>{% block title %}Действай — намери работа, която ти пасва{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'main/site.css' %}">
+</head>
+<body>
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a class="brand" href="{% url 'home' %}" aria-label="Действай — начална страница"><span class="brand-mark">д.</span> действай<span class="brand-dot">!</span></a>
+      <nav class="main-nav" aria-label="Основна навигация">
+        <a href="{% url 'home' %}#jobs">Обяви</a>
+        <a class="button button-dark button-small" href="{% url 'create_job' %}">За работодатели <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    {% if messages %}
+      <div class="container message-stack" aria-live="polite">
+        {% for message in messages %}<div class="flash-message">{{ message }}</div>{% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand footer-brand" href="{% url 'home' %}"><span class="brand-mark">д.</span> действай<span class="brand-dot">!</span></a>
+      <span>По-малко скрол. Повече смисъл.</span>
+    </div>
+  </footer>
+</body>
+</html>

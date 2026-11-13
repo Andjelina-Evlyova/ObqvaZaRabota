@@ -1,0 +1,67 @@
+{% extends "main/base.html" %}
+
+{% block title %}{{ job.title }} в {{ job.company_name }} — Действай!{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+  <div class="container detail-container">
+    <a class="back-link" href="{% url 'home' %}#jobs"><span aria-hidden="true">←</span> Всички възможности</a>
+    <div class="detail-hero">
+      <div class="detail-hero-top">
+        <div class="company-avatar company-avatar-large" aria-hidden="true">{{ job.company_name|slice:":1"|upper }}</div>
+        <span class="job-type"><span></span> АКТУАЛНА ОБЯВА</span>
+        <div class="job-actions">
+          <a href="{% url 'edit_job' job.pk %}">Редактирай</a>
+          <a class="job-delete-link" href="{% url 'delete_job' job.pk %}">Изтрий</a>
+        </div>
+      </div>
+      <span class="job-company">{{ job.company_name }}</span>
+      <h1>{{ job.title }}</h1>
+      <div class="detail-meta">
+        <span>⌖ {{ job.location }}</span>
+        <span>◷ {{ job.get_work_mode_display }}</span>
+        <span>◷ {{ job.created_at|date:"d.m.Y" }}</span>
+      </div>
+      <span class="salary-tag detail-salary">{% if job.salary %}{{ job.salary }}{% else %}Заплата по договаряне{% endif %}</span>
+      <a class="button button-lime detail-cta" href="#apply">Кандидатствай сега <span aria-hidden="true">↓</span></a>
+      <span class="detail-stamp" aria-hidden="true">ТВОЯТ<br>СЛЕДВАЩ<br>ХОД!</span>
+    </div>
+
+    <div class="detail-layout">
+      <article class="description-panel">
+        <span class="eyebrow muted-eyebrow">ПОВЕЧЕ ЗА РОЛЯТА</span>
+        <h2>Може да е твоето място<span class="heading-period">.</span></h2>
+        <div class="description">{{ job.description|linebreaks }}</div>
+        <div class="good-luck"><span>✳</span><p>Не чакай „перфектния момент“.<br><b>Това може да е следващият ти ход.</b></p></div>
+      </article>
+      <aside class="apply-panel" id="apply">
+        {% if messages %}
+          <div class="apply-success">
+            <span class="success-icon">✓</span>
+            <h2>Изпратено. Браво!</h2>
+            <p>Кандидатурата ти за {{ job.title }} е приета. Стискаме палци!</p>
+            <a class="text-link" href="{% url 'home' %}#jobs">Разгледай още обяви ↗</a>
+          </div>
+        {% else %}
+          <span class="eyebrow muted-eyebrow">ЕДНА МАЛКА СТЪПКА</span>
+          <h2>Кандидатствай<span class="heading-period">.</span></h2>
+          <p class="apply-intro">Кажи ни кой си. Не е нужно мотивационно есе.</p>
+          <form class="posting-form application-form" method="post" action="{% url 'apply_for_job' job.pk %}">
+            {% csrf_token %}
+            {% if application_form.non_field_errors %}<div class="form-errors">{{ application_form.non_field_errors }}</div>{% endif %}
+            {% for field in application_form %}
+              <div class="form-group{% if field.errors %} has-error{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark"> *</span>{% endif %}</label>
+                {{ field }}
+                {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+              </div>
+            {% endfor %}
+            <button class="button button-purple form-submit" type="submit">Действай — кандидатствай <span aria-hidden="true">↗</span></button>
+            <span class="privacy-note">Изпращайки формата, споделяш данните си с работодателя.</span>
+          </form>
+        {% endif %}
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

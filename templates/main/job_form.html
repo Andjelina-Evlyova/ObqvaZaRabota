@@ -1,0 +1,29 @@
+{% extends "main/base.html" %}
+
+{% block title %}{% if editing %}Редактирай обява{% else %}Публикувай обява{% endif %} — Действай!{% endblock %}
+
+{% block content %}
+<section class="detail-section">
+  <div class="container form-container">
+    <a class="back-link" href="{% url 'home' %}"><span aria-hidden="true">←</span> Към обявите</a>
+    <div class="form-heading">
+      <span class="eyebrow muted-eyebrow">{% if editing %}РЕДАКТИРАНЕ НА ОБЯВА{% else %}ЗА РАБОТОДАТЕЛИ{% endif %}</span>
+      <h1>{% if editing %}Обнови своята<br><span>обява.</span>{% else %}Намери своя<br><span>следващ колега.</span>{% endif %}</h1>
+      <p>{% if editing %}Промени детайлите и запази актуална информацията за позицията.{% else %}Сподели повече за позицията и достигни до точните хора.{% endif %}</p>
+    </div>
+    <form class="posting-form" method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+      {% for field in form %}
+        <div class="form-group{% if field.errors %} has-error{% endif %}">
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark"> *</span>{% endif %}</label>
+          {{ field }}
+          {% if field.errors %}<div class="field-error">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <p class="form-footnote">Полетата със * са задължителни.</p>
+      <button class="button button-purple form-submit" type="submit">{% if editing %}Запази промените{% else %}Публикувай обявата{% endif %} <span aria-hidden="true">↗</span></button>
+    </form>
+  </div>
+</section>
+{% endblock %}
